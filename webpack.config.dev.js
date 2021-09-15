@@ -24,7 +24,7 @@ module.exports = (env) => {
     },
     devServer: {
       host: "0.0.0.0",
-      port: 8081,
+      port: 8082,
       writeToDisk: true,
       contentBase: path.join(__dirname, "dist"),
       hot: true,

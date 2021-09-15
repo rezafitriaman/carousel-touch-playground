@@ -1,12 +1,36 @@
 @import "./common";
 
-.header {
-  text-align: center;
-}
+.slider-container {
+  display: block;
+  overflow: hidden;
+  margin: 0 1rem;
 
-.shrine-logo {
-  width: 150px;
-  height: 150px;
-  padding-top: 80px;
-  fill: currentColor;
+  .slider-content {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      padding: 0 1rem;
+      flex: none;
+      box-sizing: border-box;
+
+      img {
+        display: block;
+        min-width: 100%;
+        height: 300px;
+        object-fit: cover;
+        box-sizing: border-box;
+      }
+    }
+
+    li:first-child {
+      padding-left: 0;
+    }
+
+    li:last-child {
+      padding-right: 0;
+    }
+  }
 }
