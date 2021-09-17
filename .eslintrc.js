@@ -7,7 +7,7 @@ module.exports = {
   "extends": ["eslint:recommended"],
   "rules": {
     "no-unused-vars": "warn",
-    "no-console": ["warn", { "allow": ["warn", "error", "info"] }]
+    "no-console": ["warn", { "allow": ["log","warn", "error", "info"] }]
   },
   "env": {
     "browser": true,
