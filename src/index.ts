@@ -7,9 +7,11 @@ const track = document.querySelector('.slider-content-track')! as HTMLElement;
 let initialPosition = 0;
 let moving = false;
 let transformValue = 0;
+let inter:any = null;
 
 track.addEventListener('mousedown', (event : Event)=> {
     console.log('mouse down');
+    clearInterval(inter);
     initialPosition = (event as MouseEvent).pageX - 16;
     moving = true;
     const transformMatrix = window.getComputedStyle(track).getPropertyValue('transform');
@@ -24,11 +26,61 @@ track.addEventListener('mousedown', (event : Event)=> {
 track.addEventListener('mousemove', (event : Event)=> {
     if(!moving) return;
     console.log('mouse move');
-    console.log('transformValue', transformValue)
     const currentPosition = (event as MouseEvent).pageX - 16;
     const diff = currentPosition - initialPosition;
-    console.log(diff)
+    checkBoundary(diff);
+})
 
+track.addEventListener('mouseup', ()=> {
+    console.log('mouse up');
+    moving = false;
+    track.classList.remove('active');
+
+    const currentPosition = (event as MouseEvent).pageX - 16;
+    const diff = currentPosition - initialPosition;
+    console.log('diff mouse up', diff)
+
+    let transformMatrix = window.getComputedStyle(track).getPropertyValue('transform');
+    if(transformMatrix !== 'none') {
+        transformValue = parseInt(transformMatrix.split(',')[4].trim());
+        console.log('transformValue mouse up', transformValue)
+        let init = 50;
+        inter = setInterval(()=> {
+            if(diff < 0) {
+                console.log('to right');
+                track.style.transform = `transLateX(${transformValue + -init}px)`;
+
+                if((transformValue + -init ) < -(track.scrollWidth - trackContainer.offsetWidth)) {
+                    console.log('yes');
+                    track.style.transform = `transLateX(${-(track.scrollWidth - trackContainer.offsetWidth)}px)`;
+                }
+            }else {
+                console.log('to left');
+                track.style.transform = `transLateX(${transformValue + init}px)`;
+                console.log('with init', transformValue + init);
+               if(transformValue + init > 0) {
+                   track.style.transform = `transLateX(${0}px)`;
+               }
+            }
+
+            if(init > 800) {
+                clearInterval(inter);
+            }
+            init = init + 10
+        }, 5);
+    }
+
+
+})
+
+
+track.addEventListener('mouseleave', ()=> {
+    console.log('mouse leave');
+    moving = false;
+    track.classList.add('remove');
+})
+
+const checkBoundary = (diff: number) => {
     if(transformValue + diff > 0) {
         track.style.transform = `transLateX(${0}px)`;
     }else {
@@ -38,25 +90,8 @@ track.addEventListener('mousemove', (event : Event)=> {
     if((transformValue + diff ) < -(track.scrollWidth - trackContainer.offsetWidth)) {
         track.style.transform = `transLateX(${-(track.scrollWidth - trackContainer.offsetWidth)}px)`;
     }
-})
-
-track.addEventListener('mouseup', ()=> {
-    console.log('mouse up');
-    moving = false;
-    track.classList.remove('active');
-})
-
-track.addEventListener('mouseleave', ()=> {
-    console.log('mouse leave');
-    moving = false;
-    track.classList.add('remove');
-})
-
-function checkBoundary() {
-    console.log('checkBoundary');
-    console.log(window.getComputedStyle(track).getPropertyValue('transform'))
 }
 
-checkBoundary();
+console.log(window.PointerEvent)
 
 /*TODO add mobile version*/
